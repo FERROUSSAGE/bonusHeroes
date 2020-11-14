@@ -5,15 +5,23 @@ window.addEventListener('DOMContentLoaded', () => {
         constructor(){
             this.data = [];
             this.filterData = [];
+            this.stepCardUpload = 10;
+            this.btnMore = document.getElementById('more');
+        }
+
+        animateCard(){
+
         }
 
         generateCard(){
-            const cards = document.querySelector('.cards')
-            cards.innerHTML = '';
-        
-            const iterator = this.filterData.length > 0 ? this.filterData : this.data;
+            const cards = document.querySelector('.cards'),
+                iterator = this.filterData.length > 0 ? this.filterData : this.data;
 
-            iterator.forEach((item) => {
+            cards.innerHTML = '';
+
+            iterator.forEach((item, i) => {
+                if(i >= this.stepCardUpload) return;
+
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.insertAdjacentHTML('beforeend', `
@@ -28,6 +36,9 @@ window.addEventListener('DOMContentLoaded', () => {
                         <p>Фильмы: ${item.movies}</p>
                     </div>
                 `);
+
+                card.addEventListener('click', () => this.modal(item));
+
                 cards.append(card);
             });
 
@@ -73,7 +84,11 @@ window.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 film.textContent = target.value;
-                target.value.toLowerCase() === 'all' ? (this.filterData = [], this.generateCard()) : this.generateCard();
+                target.value.toLowerCase() === 'all' ?
+                    (this.filterData = [], 
+                        this.stepCardUpload = 10, 
+                        this.btnMore.style.display = 'block', 
+                        this.generateCard()) : (this.generateCard(), this.btnMore.style.display = 'none');
             });
             
         }
@@ -96,8 +111,52 @@ window.addEventListener('DOMContentLoaded', () => {
 
         }
 
+        modal({name, species, birthDay, deathDay, actors, citizenship}){
+            const closeBtn = document.querySelector('.modal-close'),
+                title = document.getElementById('content-title'),
+                text = document.getElementById('content-text');
+
+            title.textContent = `Подробнее о ${name}`;
+            text.innerHTML = `
+                <p>Национальность: ${citizenship ? citizenship : 'неизвестно'}</p>
+                <p>Вид: ${species ? species : 'неизвестно'}</p>
+                <p>Год рождения: ${birthDay ? birthDay : 'неизвесно'}</p>
+                <p>Актер: ${actors ? actors : 'неизвестено'}</p>
+                <p>Год смерти: ${deathDay ? deathDay : 'неизвестно'}</p>
+            `;
+
+            this.openModal();
+
+            closeBtn.addEventListener('click', this.closeModal);
+        }
+
+        openModal(){
+            document.querySelector(".modal").classList.add("is_open");
+        }
+        
+        closeModal(){
+            document.querySelector(".modal").classList.add("is_closing");
+                setTimeout(() => {
+                  document.querySelector(".modal").classList.remove("is_closing");
+                  document.querySelector(".modal").classList.remove("is_open");
+            }, 300);
+        }
+
+        uploadCardMore(){
+
+            this.btnMore.addEventListener('click', () => {
+                this.stepCardUpload += 10;
+                this.generateCard();
+
+                if(this.stepCardUpload >= this.data.length){
+                    this.btnMore.style.display = 'none';
+                }
+            });
+        }
+
         init(){
             this.getAJAXCard();
+            this.uploadCardMore();
         }
     }
 

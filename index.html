@@ -13,13 +13,27 @@
     <div class="wrapper">
         <nav class="card-filter">
             <div class="sort">
-                <label>Filter movies:</label>
-                <select id="select-movies">All heroes</select>
+                <div class="sort-movies">
+                    <label>Filter movies:</label>
+                    <select id="select-movies">All heroes</select>
+                </div>
+                <h1 id="film">All</h1> 
             </div> 
-            <h1 id="film">All</h1> 
           </nav>
           <section class="cards"></section>
+          <div class="buttons">
+            <button id="more">Загрузить еще</button>
+          </div>
     </div>
 
+
+    <div class="modal">
+        <div class="modal-dimmer"></div>
+        <div class="modal-content">
+          <div class="modal-close">&times;</div>
+          <h1 id="content-title">Заголовок</h1>
+          <p id="content-text"></p>
+        </div>
+      </div>
 </body>
 </html>
