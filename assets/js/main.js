@@ -2,21 +2,31 @@ window.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     class setCards{
-        constructor(){
+        constructor(btnMore, selectMovies, selectGenders, selectStatus, nameHero){
             this.data = [];
             this.filterData = [];
             this.stepCardUpload = 10;
-            this.btnMore = document.getElementById('more');
+            this.btnMore = btnMore;
+            this.selectMovies = selectMovies;
+            this.selectGenders = selectGenders;
+            this.selectStatus = selectStatus;
+            this.nameHero = nameHero;
         }
 
-        animateCard(){
-
+        burgerMenu(){
+            const burger = document.getElementById('sandwichmenu'),
+                sortMenu = document.querySelector('.sort');
+            burger.addEventListener('click', (event) => {
+                event.preventDefault();
+                burger.classList.toggle('active');
+                sortMenu.classList.toggle('active');
+            });
         }
 
         generateCard(){
             const cards = document.querySelector('.cards'),
                 iterator = this.filterData.length > 0 ? this.filterData : this.data;
-
+            
             cards.innerHTML = '';
 
             iterator.forEach((item, i) => {
@@ -45,69 +55,76 @@ window.addEventListener('DOMContentLoaded', () => {
             this.filterData = [];
         }    
 
-        parseMovies(){
+        generateOption(select, item){
+            const newOption = document.createElement('option');
+            newOption.value = item;
+            newOption.textContent = item;
+
+            select.appendChild(newOption);
+        }
+
+        projection(field, obj){
+            const rowList = obj.reduce((acc, item) => acc.concat(item[field]), []);
+            return rowList.filter((item, i) => item && rowList.indexOf(item) === i);
+        }
+
+        parseData(){
             if(this.data === '') return;
 
-            const rowListMovies = this.data.reduce((acc, item) => acc.concat(item.movies), []),
-                listMovies = rowListMovies.filter((item, i) => item && rowListMovies.indexOf(item) === i);
+            this.projection('movies', this.data)
+                .forEach(item => this.generateOption(this.selectMovies, item));
+            this.projection('status', this.data)
+                .forEach(item => this.generateOption(this.selectStatus, item));
+            this.projection('gender', this.data)
+                .forEach(item => this.generateOption(this.selectGenders, item));
 
             this.generateCard();
-            this.filter(listMovies);
+            this.filter();
 
         }
 
-        filter(movies){
-            const film = document.getElementById('film'),
-                selectMovies = document.getElementById('select-movies');
-            
-            if(movies){
-                movies.unshift('All');
-                movies.forEach((item) => {
-                    const newOption = document.createElement('option');
-                    newOption.value = item;
-                    newOption.textContent = item;
+        filtered(target, field){
+            this.data.forEach(item => {
+                if(item[field]){
+                    [item[field]].forEach((key) => {
+                        if(Array.isArray(key))
+                            key.forEach(i => i.toLowerCase() === target.value.toLowerCase() ? this.filterData.push(item) : '');
+                        else if(key.toLowerCase().includes(target.value.toLowerCase().trim())){
+                            this.filterData.push(item);
+                        }
+                    });
+                }
+            });
+            this.generateCard();
+        }
 
-                    selectMovies.appendChild(newOption);
-                });
-            }
+        filter(){
+            const sortContent = document.querySelector('.sort-content');
 
-            selectMovies.addEventListener('change', (event) => {
+            sortContent.addEventListener('input', (event) => {
                 const target = event.target;
 
-                this.data.forEach((item) => {
-                    if(item.movies){
-                        item.movies.forEach((movie) =>{
-                            if(movie.toLowerCase() === target.value.toLowerCase()){
-                                this.filterData.push(item);
-                            }
-                        });
-                    }
-                });
-                film.textContent = target.value;
-                target.value.toLowerCase() === 'all' ?
-                    (this.filterData = [], 
-                        this.stepCardUpload = 10, 
-                        this.btnMore.style.display = 'block', 
-                        this.generateCard()) : (this.generateCard(), this.btnMore.style.display = 'none');
+                switch(target){
+                    case this.selectMovies: this.filtered(target, 'movies');
+                        break;
+                    case this.selectStatus: this.filtered(target, 'status');
+                        break;
+                    case this.selectGenders: this.filtered(target, 'gender');
+                        break;
+                    case this.nameHero: this.filtered(target, 'name');
+                        break;
+                }
             });
-            
         }
 
-        getAJAXCard(){
+        getData(){
 
-            const request = new XMLHttpRequest();
-
-            request.addEventListener('readystatechange', () => {
-                if(request.readyState !== 4){
-                    return;
-                }
-
-                request.status === 200 && request.readyState === 4 ?
-                    (this.data = JSON.parse(request.responseText), this.parseMovies()) : '';
-            });
-
-            request.open('GET', '../../dbHeroes.json');
-            request.send();
+            fetch('../../dbHeroes.json')
+                .then(response => response.json())
+                .then(heroes => (this.data = heroes, this.parseData()))
+                .catch(error => {
+                    throw new Error(error);
+                });
 
         }
 
@@ -155,13 +172,19 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         init(){
-            this.getAJAXCard();
+            this.getData();
             this.uploadCardMore();
+            this.burgerMenu();
         }
     }
 
+    const selectMovies = document.getElementById('select-movies'),
+        selectGender = document.getElementById('select-gender'),
+        selectStatus = document.getElementById('select-status'),
+        btnMore = document.getElementById('more'),
+        nameHero = document.getElementById('name-herro__input'),
+        card = new setCards(btnMore, selectMovies, selectGender, selectStatus, nameHero);
 
-    const card = new setCards();
     card.init();
 
 });

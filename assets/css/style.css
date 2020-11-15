@@ -9,44 +9,32 @@ body{
     margin: 0 auto;
 }
 
-.card-filter {
-    position: fixed;
-    display: flex;
-    align-items: center;
-    z-index: 100;
-    top: 0;
-}
-
-.card-filter h1 {
-    margin: 10px 10px;
+.card-filter{
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
 }
 
 .sort{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
+  position: relative;
+  top: -75px;
+  background: #40407a;
+  color: white;
+  opacity: 0;
+  transition: opacity .5s ease-in-out;
 }
 
-.sort-movies{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}   
-
-.sort-movies:after{
-    content: '';
-    display: block;
-    width: 5px;
-    height: 40px;
-    background-color: plum;
-    position: absolute;
-    right: -10px;
+.sort p {
+  margin-left: 5px;
+  padding-top: 5px;
 }
 
-#film{
-    margin-left: 15px;
-    color: white;
+.sort-item{
+  margin: 5px 10px;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
 }
 
 .cards {
@@ -117,7 +105,7 @@ button#more{
     }
 }
 
-@media (max-width: 405px) {
+@media (max-width: 380px) {
     .card-filter {
       flex-direction: column;
     }
@@ -128,6 +116,7 @@ button#more{
         flex: 1 0 100%;
     }
 }
+
 
 .modal {
     position: fixed;
@@ -215,5 +204,50 @@ button#more{
       opacity: 1;
       transform: translateY(0);
     }
+  }
+  #sandwichmenu {
+    position: relative;
+    top: -10px;
+    right: -200px;
+    z-index: 200;
+  }
+  .tpl_hamburger svg {
+    height: 40px;
+    width: 60px;
+  }
+  .tpl_hamburger svg {
+    cursor: pointer;  
+    height: 50px;  
+    transform: translate3d(0px, 0px, 0px);  
+    width: 80px;
+  }
+
+  svg:not(:root) {overflow: hidden;}
+  .tpl_hamburger path.top, .tpl_hamburger path.bottom {
+      stroke-dasharray: 240px, 950px;
+  }
+  .tpl_hamburger path {
+      fill: none; stroke: #000; stroke-dashoffset: 0; stroke-linecap: round; stroke-width: 40px;
+      transition: stroke-dashoffset 0.5s cubic-bezier(0.25, -0.25, 0.75, 1.25) 0s, stroke-dasharray 0.5s cubic-bezier(0.25, -0.25, 0.75, 1.25) 0s;
+  }
+  .tpl_hamburger path.middle {stroke-dasharray: 240px, 240px;}
+  .tpl_hamburger path {
+      fill: none; stroke: #000; stroke-dashoffset: 0; stroke-linecap: round; stroke-width: 40px;
+      transition: stroke-dashoffset 0.5s cubic-bezier(0.25, -0.25, 0.75, 1.25) 0s, stroke-dasharray 0.5s cubic-bezier(0.25, -0.25, 0.75, 1.25) 0s;
+  }
+  
+  .tpl_hamburger.active path.top, .tpl_hamburger.active path.bottom {
+      stroke-dashoffset: -650px;
+  }
+  .tpl_hamburger path.top, .tpl_hamburger path.bottom {
+      stroke-dasharray: 240px, 950px;
+  }
+  .tpl_hamburger.active path.middle {
+      stroke-dasharray: 1px, 220px;
+      stroke-dashoffset: -115px;
+  }
+  
+  .sort.active {
+    opacity: 0.8;
   }
   

@@ -12,13 +12,40 @@
 
     <div class="wrapper">
         <nav class="card-filter">
-            <div class="sort">
-                <div class="sort-movies">
-                    <label>Filter movies:</label>
-                    <select id="select-movies">All heroes</select>
-                </div>
-                <h1 id="film">All</h1> 
-            </div> 
+          <div class="tpl_hamburger" id="sandwichmenu">
+            <svg viewBox="0 0 800 600">
+              <path d="M300,220 C300,220 520,220 540,220 C740,220 640,540 520,420 C440,340 300,200 300,200" class="top"></path>
+              <path d="M300,320 L540,320" class="middle"></path>
+              <path d="M300,210 C300,210 520,210 540,210 C740,210 640,530 520,410 C440,330 300,190 300,190" class="bottom" transform="translate(480, 320) scale(1, -1) translate(-480, -318) "></path>
+            </svg>
+          </div>
+          <div class="sort">
+            <p>Filters: </p>
+            <div class="sort-content">
+              <div class="sort-content__movies sort-item">
+                <label>Filter movies:</label>
+                <select id="select-movies">
+                  <option value="All heroes">All heroes</option>
+                </select>
+              </div>
+              <div class="sort-content__status sort-item">
+                <label>Filter status:</label>
+                <select id="select-status">
+                  <option value="All heroes">All heroes</option>
+                </select>
+              </div>
+              <div class="sort-content__gender sort-item">
+                <label>Filter gender:</label>
+                <select id="select-gender">
+                  <option value="All heroes">All heroes</option> 
+                </select>
+              </div>
+              <div class="sort-content__search sort-item">
+                <label>Введите имя персонажа:</label>
+                <input type="text" id="name-herro__input">
+              </div>
+            </div>
+          </div>
           </nav>
           <section class="cards"></section>
           <div class="buttons">

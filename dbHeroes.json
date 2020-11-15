@@ -2,7 +2,7 @@
   {
     "name": "Ancient One",
     "species": "human",
-    "gender": "Female",
+    "gender": "female",
     "birthDay": "1316",
     "deathDay": "2017",
     "status": "deceased",
@@ -297,7 +297,7 @@
     "deathDay": "2017",
     "status": "deceased",
     "actors": "Cate Blanchett",
-    "photo": "dbimage/Thor_Ragnarok_Textless_Character_Posters_01.jpg/",
+    "photo": "dbimage/Thor_Ragnarok_Textless_Character_Posters_01.jpg",
     "movies": [
       "Thor: Ragnarok"
     ]
