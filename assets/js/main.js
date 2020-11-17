@@ -85,11 +85,17 @@ window.addEventListener('DOMContentLoaded', () => {
 
         filtered(target, field){
             this.data.forEach(item => {
+
+                if(target.value === 'All heroes')
+                    this.btnMore.style.display = 'block';
+                else 
+                    this.btnMore.style.display = 'none';
+
                 if(item[field]){
                     [item[field]].forEach((key) => {
                         if(Array.isArray(key))
                             key.forEach(i => i.toLowerCase() === target.value.toLowerCase() ? this.filterData.push(item) : '');
-                        else if(key.toLowerCase().includes(target.value.toLowerCase().trim())){
+                        else if(!key.toLowerCase().indexOf(target.value.toLowerCase())){
                             this.filterData.push(item);
                         }
                     });
